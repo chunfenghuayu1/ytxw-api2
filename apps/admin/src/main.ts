@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core'
 import { AdminModule } from './admin.module'
 import { Logger, VersioningType } from '@nestjs/common'
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
-import helmet from 'helmet'
 
 async function bootstrap() {
     const app = await NestFactory.create(AdminModule)
@@ -15,9 +14,6 @@ async function bootstrap() {
         defaultVersion: '1',
         type: VersioningType.URI
     })
-
-    // XSS
-    app.use(helmet())
 
     // 开启跨域
     app.enableCors()

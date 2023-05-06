@@ -9,5 +9,7 @@ export default registerAs('database', () => ({
     database: process.env.SQL_DATABASE,
     // entities: [join(__dirname, '../', '**/**.entity{.ts,.js}')],//建议关闭 使用如下
     autoLoadEntities: true, //自动加载实体 forFeature方法注册的实体都将自动添加
-    synchronize: process.env.MODE === 'dev' ? true : false //通过环境变量控制，生产环境为false
+    synchronize: process.env.MODE === 'dev' ? true : false, //通过环境变量控制，生产环境为false
+    bigNumberStrings: false,
+    timezone: '+08:00'
 }))
