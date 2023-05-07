@@ -1,9 +1,7 @@
-import { Column, Entity, Index } from 'typeorm'
+import { Column, Entity } from 'typeorm'
 
-@Index('role_id', ['roleId'], {})
-@Index('menu_id', ['menuId'], {})
 @Entity('sys_role_menu', { schema: 'ytxw' })
-export class SysRoleMenu {
+export class RoleMenuEntity {
     @Column('bigint', { primary: true, name: 'role_id', comment: '角色ID' })
     roleId: number
 

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty } from 'class-validator'
+import { IsNotEmpty, IsString, MaxLength, MinLength } from 'class-validator'
 
 export class LoginDto {
     @ApiProperty({
@@ -7,7 +7,10 @@ export class LoginDto {
         required: true,
         example: 'admin'
     })
+    @IsString({ message: '用户名类型错误，正确类型 string' })
     @IsNotEmpty({ message: '用户名不能为空!' })
+    @MinLength(5, { message: '用户名至少5个字符' })
+    @MaxLength(20, { message: '用户名最多20个字符' })
     readonly username: string
 
     @ApiProperty({

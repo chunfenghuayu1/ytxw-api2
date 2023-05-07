@@ -11,5 +11,6 @@ export default registerAs('database', () => ({
     autoLoadEntities: true, //自动加载实体 forFeature方法注册的实体都将自动添加
     synchronize: process.env.MODE === 'dev' ? true : false, //通过环境变量控制，生产环境为false
     bigNumberStrings: false,
-    timezone: '+08:00'
+    timezone: 'local',
+    charser: 'utf8mb4'
 }))

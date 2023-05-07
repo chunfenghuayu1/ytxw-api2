@@ -16,16 +16,26 @@ export class AuthsController {
     @Post('login')
     @ApiOperation({ summary: '用户登录' })
     @UseGuards(AuthGuard('local'))
-    async login(@Body() loginDto: LoginDto) {
-        return await this.authsService.login(loginDto)
+    async login(@Body() loginDto: LoginDto, @Req() req) {
+        const { user } = req
+        return await this.authsService.login(user)
     }
 
-    // 获取用户信息
+    // 获取用户信息、权限、角色
     @Post('getInfo')
     @ApiOperation({ summary: '登录后获取用户相关信息' })
     @ApiBearerAuth()
     @UseGuards(AuthGuard('jwt'))
     async getInfo(@Req() req) {
-        return await this.usersService.getInfo(req.user.username)
+        return await this.usersService.getInfo(req.user.uid)
+    }
+
+    // 获取路由信息
+    @Post('getRouters')
+    @ApiOperation({ summary: '获取路由信息' })
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    async getRouters(@Req() req) {
+        return await this.usersService.getRouters(req.user.uid)
     }
 }

@@ -1,8 +1,8 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntiy } from './base.entity'
 
-@Index('menu_id', ['menuId'], {})
 @Entity('sys_menu', { schema: 'ytxw' })
-export class SysMenu {
+export class MenuEntity extends BaseEntiy {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'menu_id',
@@ -17,7 +17,7 @@ export class SysMenu {
         name: 'parent_id',
         nullable: true,
         comment: '父菜单ID',
-        default: 0
+        default: () => "'0'"
     })
     parentId: number | null
 
@@ -25,7 +25,7 @@ export class SysMenu {
         name: 'orderNo',
         nullable: true,
         comment: '显示顺序',
-        default: 0
+        default: () => "'0'"
     })
     orderNo: number | null
 
@@ -61,50 +61,48 @@ export class SysMenu {
     })
     query: string | null
 
-    @Column('enum', {
+    @Column('int', {
         name: 'is_frame',
         nullable: true,
         comment: '是否为外链（0是 1否）',
-        enum: ['0', '1'],
-        default: () => '0'
+        default: () => "'1'"
     })
-    isFrame: '0' | '1' | null
+    isFrame: number | null
 
-    @Column('enum', {
+    @Column('int', {
         name: 'is_cache',
         nullable: true,
         comment: '是否缓存（0缓存 1不缓存）',
-        enum: ['0', '1'],
-        default: () => '0'
+        default: () => "'0'"
     })
-    isCache: '0' | '1' | null
+    isCache: number | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'menu_type',
         nullable: true,
         comment: '菜单类型（M目录 C菜单 F按钮）',
-        enum: ['M', 'C', 'F'],
-        default: 'M'
+        length: 1,
+        default: () => "'M'"
     })
-    menuType: 'M' | 'C' | 'F' | null
+    menuType: string | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'visible',
         nullable: true,
         comment: '菜单状态（0显示 1隐藏）',
-        enum: ['0', '1'],
-        default: () => '0'
+        length: 1,
+        default: () => "'0'"
     })
-    visible: '0' | '1' | null
+    visible: string | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'status',
         nullable: true,
         comment: '菜单状态（0正常 1停用）',
-        enum: ['0', '1'],
-        default: () => '0'
+        length: 1,
+        default: () => "'0'"
     })
-    status: '0' | '1' | null
+    status: string | null
 
     @Column('varchar', {
         name: 'perms',
@@ -119,49 +117,17 @@ export class SysMenu {
         nullable: true,
         comment: '菜单图标',
         length: 100,
-        default: '#'
+        default: () => "'#'"
     })
     icon: string | null
 
     @Column('varchar', {
         name: 'title',
         nullable: true,
-        comment: '显示菜单名',
+        comment: '菜单名',
         length: 200
     })
     title: string | null
-
-    @Column('varchar', {
-        name: 'create_by',
-        nullable: true,
-        comment: '创建者',
-        length: 64
-    })
-    createBy: string | null
-
-    @Column({
-        type: 'datetime',
-        name: 'create_time',
-        default: () => 'CURRENT_TIMESTAMP',
-        comment: '创建时间'
-    })
-    createTime: Date
-
-    @Column('varchar', {
-        name: 'update_by',
-        nullable: true,
-        comment: '更新者',
-        length: 64
-    })
-    updateBy: string | null
-
-    @UpdateDateColumn({
-        type: 'datetime',
-        name: 'update_time',
-        default: () => 'CURRENT_TIMESTAMP',
-        comment: '更新时间'
-    })
-    updateTime: Date
 
     @Column('varchar', {
         name: 'remark',

@@ -1,5 +1,5 @@
 import { IStrategyOptions, Strategy } from 'passport-local'
-import { Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UsersService } from '../users/users.service'
 import { CryptoService } from '@app/common/crypto/crypto.service'
@@ -16,16 +16,16 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         // 查找用户
         const user = await this.usersService.findByUsername(username)
         if (!user) {
-            throw new UnauthorizedException({ message: '用户名或密码错误' })
+            throw new NotFoundException({ message: '用户名或密码错误' })
         }
         // 获取加密后的密码进行对比
         const reqPwd = this.cryptoService.decryptPwd(password, user.pwdSalt)
 
         // 如果不一样，则验证失败
         if (reqPwd !== user.password) {
-            throw new UnauthorizedException()
+            throw new NotFoundException({ message: '用户名或密码错误' })
         }
         // 如果一样，则通过
-        return true
+        return user
     }
 }

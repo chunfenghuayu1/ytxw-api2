@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { LoginDto } from './dto/auths.dto'
 import { JwtService } from '@nestjs/jwt'
 import { UsersService } from '../users/users.service'
+import { UserEntity } from '../entities/user.entity'
 
 @Injectable()
 export class AuthsService {
@@ -10,10 +10,12 @@ export class AuthsService {
         private readonly usersService: UsersService
     ) {}
 
-    async login(loginDto: LoginDto): Promise<any> {
-        await this.usersService.loginDateByName(loginDto.username)
+    async login(user: UserEntity): Promise<any> {
+        // 更新登录时间
+        await this.usersService.loginDateById(user.userId)
+        // 返回token
         return {
-            t: await this.jwtService.signAsync({ username: loginDto.username })
+            t: await this.jwtService.signAsync({ uid: user.userId })
         }
     }
 }

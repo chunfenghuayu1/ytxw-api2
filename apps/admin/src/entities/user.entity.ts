@@ -1,32 +1,35 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Exclude, Transform } from 'class-transformer'
+import * as moment from 'moment'
+import { BaseEntiy } from './base.entity'
+import { UserRoleEntity } from './user-role.entity'
 
-@Index('user_id', ['userId'], {})
 @Entity('sys_user', { schema: 'ytxw' })
-export class SysUser {
+export class UserEntity extends BaseEntiy {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'user_id',
         comment: '用户ID'
     })
-    userId: string
+    userId: number
 
     @Column('bigint', { name: 'dept_id', nullable: true, comment: '部门ID' })
-    deptId: string | null
+    deptId: number | null
 
-    @Column('varchar', { name: 'user_name', comment: '用户账户', length: 30 })
+    @Column('varchar', { name: 'user_name', comment: '用户账号', length: 30 })
     userName: string
 
     @Column('varchar', { name: 'nick_name', comment: '用户昵称', length: 30 })
     nickName: string
 
-    @Column('enum', {
+    @Column('varchar', {
         name: 'user_type',
         nullable: true,
         comment: '用户类型（00系统用户，01微信用户）',
-        enum: ['00', '01'],
-        default: () => '00'
+        length: 2,
+        default: () => "'00'"
     })
-    userType: '00' | '01' | null
+    userType: string | null
 
     @Column('varchar', {
         name: 'email',
@@ -44,14 +47,14 @@ export class SysUser {
     })
     phonenumber: string | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'sex',
         nullable: true,
         comment: '用户性别（0男 1女 2未知）',
-        enum: ['0', '1', '2'],
-        default: () => '2'
+        length: 1,
+        default: () => "'2'"
     })
-    sex: '0' | '1' | '2' | null
+    sex: string | null
 
     @Column('varchar', {
         name: 'avatar',
@@ -67,6 +70,7 @@ export class SysUser {
         comment: '密码',
         length: 100
     })
+    @Exclude({ toPlainOnly: true })
     password: string | null
 
     @Column('varchar', {
@@ -75,31 +79,32 @@ export class SysUser {
         comment: '密码盐',
         length: 8
     })
+    @Exclude({ toPlainOnly: true })
     pwdSalt: string | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'status',
         nullable: true,
         comment: '帐号状态（0正常 1停用）',
-        enum: ['0', '1'],
-        default: () => '0'
+        length: 1,
+        default: () => "'0'"
     })
-    status: '0' | '1' | null
+    status: string | null
 
-    @Column('enum', {
+    @Column('char', {
         name: 'del_flag',
         nullable: true,
         comment: '删除标志（0代表存在 2代表删除）',
-        enum: ['0', '2'],
-        default: () => '0'
+        length: 1,
+        default: () => "'0'"
     })
-    delFlag: '0' | '2' | null
+    delFlag: string | null
 
     @Column('varchar', {
         name: 'login_ip',
         nullable: true,
         comment: '最后登录IP',
-        length: 128
+        length: 50
     })
     loginIp: string | null
 
@@ -108,39 +113,8 @@ export class SysUser {
         nullable: true,
         comment: '最后登录时间'
     })
+    @Transform(({ value }) => moment(value).format('YYYY-MM-DD HH:mm:ss'), { toPlainOnly: true })
     loginDate: Date | null
-
-    @Column('varchar', {
-        name: 'create_by',
-        nullable: true,
-        comment: '创建者',
-        length: 64
-    })
-    createBy: string | null
-
-    @Column({
-        type: 'datetime',
-        name: 'create_time',
-        default: () => 'CURRENT_TIMESTAMP',
-        comment: '创建时间'
-    })
-    createTime: Date
-
-    @Column('varchar', {
-        name: 'update_by',
-        nullable: true,
-        comment: '更新者',
-        length: 64
-    })
-    updateBy: string | null
-
-    @Column({
-        type: 'datetime',
-        name: 'update_time',
-        nullable: true,
-        comment: '更新时间'
-    })
-    updateTime: Date | null
 
     @Column('varchar', {
         name: 'remark',
@@ -148,5 +122,13 @@ export class SysUser {
         comment: '备注',
         length: 500
     })
+    @Exclude({ toPlainOnly: true })
     remark: string | null
+
+    // 角色关系
+    @OneToMany(() => UserRoleEntity, userRoles => userRoles.user, {
+        cascade: ['insert', 'remove'],
+        nullable: false
+    })
+    public userRoles!: UserRoleEntity[]
 }
