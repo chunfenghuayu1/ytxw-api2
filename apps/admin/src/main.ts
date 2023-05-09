@@ -29,8 +29,8 @@ async function bootstrap() {
     SwaggerModule.setup('swagger', app, document)
 
     await app.listen(process.env.ADMIN_PORT, () => {
-        Logger.log(`Server Running at http://localhost:${process.env.ADMIN_PORT}/api/v1`)
-        Logger.log(`Swagger Running at http://localhost:${process.env.ADMIN_PORT}/swagger`)
+        Logger.log(`Server Running at http://127.0.0.1:${process.env.ADMIN_PORT}/api/v1`)
+        Logger.log(`Swagger Running at http://127.0.0.1:${process.env.ADMIN_PORT}/swagger`)
     })
 }
 bootstrap()

@@ -23,7 +23,11 @@ import { DbModule } from '@libs/db'
         },
         {
             provide: APP_PIPE,
-            useFactory: () => new ValidationPipe({ transform: true, whitelist: true })
+            useFactory: () =>
+                new ValidationPipe({
+                    transform: true
+                    // whitelist: true
+                })
         },
         CryptoService
     ],

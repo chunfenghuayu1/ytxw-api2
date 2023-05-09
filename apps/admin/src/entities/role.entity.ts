@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { BaseEntiy } from './base.entity'
 import { UserRoleEntity } from './user-role.entity'
+import { Exclude } from 'class-transformer'
 
 @Entity('sys_role', { schema: 'ytxw' })
 export class RoleEntity extends BaseEntiy {
@@ -9,6 +10,7 @@ export class RoleEntity extends BaseEntiy {
         name: 'role_id',
         comment: '角色ID'
     })
+    @Exclude({ toPlainOnly: true })
     roleId: number
 
     @Column('varchar', { name: 'role_name', comment: '角色名称', length: 30 })
@@ -19,9 +21,11 @@ export class RoleEntity extends BaseEntiy {
         comment: '角色权限字符串',
         length: 100
     })
+    @Exclude({ toPlainOnly: true })
     roleKey: string
 
     @Column('int', { name: 'role_sort', comment: '显示顺序' })
+    @Exclude({ toPlainOnly: true })
     roleSort: number
 
     @Column('char', {
@@ -31,6 +35,7 @@ export class RoleEntity extends BaseEntiy {
         length: 1,
         default: () => "'1'"
     })
+    @Exclude({ toPlainOnly: true })
     dataScope: string | null
 
     @Column('tinyint', {
@@ -40,6 +45,7 @@ export class RoleEntity extends BaseEntiy {
         width: 1,
         default: () => "'1'"
     })
+    @Exclude({ toPlainOnly: true })
     menuCheckStrictly: boolean | null
 
     @Column('char', {
@@ -64,6 +70,7 @@ export class RoleEntity extends BaseEntiy {
         comment: '备注',
         length: 500
     })
+    @Exclude({ toPlainOnly: true })
     remark: string | null
 
     @OneToMany(() => UserRoleEntity, userRole => userRole.role)

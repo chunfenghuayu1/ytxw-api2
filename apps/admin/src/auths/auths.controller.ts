@@ -17,6 +17,7 @@ export class AuthsController {
     @ApiOperation({ summary: '用户登录' })
     @UseGuards(AuthGuard('local'))
     async login(@Body() loginDto: LoginDto, @Req() req) {
+        // 当参数不正确时，本地策略会自动抛出Unauthorized异常
         const { user } = req
         return await this.authsService.login(user)
     }

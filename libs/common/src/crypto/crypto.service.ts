@@ -3,7 +3,7 @@ import * as crypto from 'crypto'
 
 @Injectable()
 export class CryptoService {
-    // 密码加密
+    // 密码加密 返回加密后信息
     encryptPwd(password: string) {
         // 生成盐
         const salt = crypto.randomBytes(5).toString('base64')
@@ -19,8 +19,11 @@ export class CryptoService {
         }
     }
 
-    //  密码解密
+    //  密码加密 返回加密后密码
     decryptPwd(password: string, pwdSalt: string) {
-        return crypto.pbkdf2Sync(password, pwdSalt, 1000, 16, process.env.DIGEST).toString('base64')
+        const tempSalt = Buffer.from(pwdSalt, 'base64')
+        return crypto
+            .pbkdf2Sync(password, tempSalt, 1000, 16, process.env.DIGEST)
+            .toString('base64')
     }
 }

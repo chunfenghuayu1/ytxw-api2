@@ -1,11 +1,11 @@
 import { IStrategyOptions, Strategy } from 'passport-local'
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UsersService } from '../users/users.service'
 import { CryptoService } from '@app/common/crypto/crypto.service'
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     constructor(
         private readonly usersService: UsersService,
         private readonly cryptoService: CryptoService
@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     async validate(username: string, password: string): Promise<any> {
         // 查找用户
         const user = await this.usersService.findByUsername(username)
+
         if (!user) {
             throw new NotFoundException({ message: '用户名或密码错误' })
         }
