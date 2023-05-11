@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 import { UserEntity } from '../entities/user.entity'
 import { instanceToPlain, plainToClass } from 'class-transformer'
 import { UserRoleEntity } from '../entities/user-role.entity'
@@ -24,13 +24,27 @@ export class UsersService {
         return res
     }
 
+    // 查找所有用户
+    async findAll(): Promise<Record<string, any>> {
+        const res = await this.user.find()
+        return instanceToPlain(res)
+    }
+
+    // 根据条件模糊查找用户
+    async findByCondition(userName?: string, nickName?: string): Promise<Record<string, any>> {
+        const res = await this.user.find({
+            where: { userName: Like(`%${userName}%`), nickName: Like(`%${nickName}%`) }
+        })
+        return instanceToPlain(res)
+    }
+
     // 登录记录时间
     async loginDateById(userId: number) {
         await this.user.update({ userId }, { loginDate: new Date() })
     }
 
     // 获取用户信息
-    async getInfo(userId: number): Promise<any> {
+    async getInfo(userId: number): Promise<Record<string, any>> {
         // 用户信息 角色
         const user = await this.userRole.findOne({
             relations: ['user', 'role'],
@@ -44,7 +58,7 @@ export class UsersService {
     }
 
     // 获取路由信息
-    async getRouters(userId: number): Promise<any> {
+    async getRouters(userId: number): Promise<Record<string, any>> {
         const routers = await this.menu
             .createQueryBuilder('menu')
             .leftJoinAndSelect(RoleMenuEntity, 'roleMenu', 'menu.menuId = roleMenu.menuId')
@@ -95,7 +109,7 @@ export class UsersService {
     }
 
     // 创建用户
-    async createUser(user: CreateUserDto): Promise<any> {
+    async createUser(user: CreateUserDto): Promise<Record<string, any>> {
         const { role, ...userWithoutRole } = user
         // 查询是否存在用户
         const res = await this.user.findOne({ where: { userName: userWithoutRole.userName } })
@@ -110,7 +124,6 @@ export class UsersService {
             UserEntity,
             Object.assign(userWithoutRole, { password, pwdSalt })
         )
-        console.log(newUser)
 
         // 级联实体
         const userRole = this.userRole.create({ roleId: role })

@@ -5,7 +5,6 @@ import {
     IsInt,
     IsNotEmpty,
     IsOptional,
-    IsPhoneNumber,
     IsString,
     Length,
     Matches,
