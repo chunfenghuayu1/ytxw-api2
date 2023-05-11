@@ -69,17 +69,21 @@ export class CreateUserDto {
     @ApiProperty({
         description: '性别',
         required: false,
+        enum: ['0', '1', '2'],
         default: '2'
     })
     @IsOptional()
+    @IsIn(['0', '1', '2'], { message: "性别只能为：['0', '1', '2']" })
     readonly sex: string = '2'
 
     @ApiProperty({
         description: '账号状态',
         required: false,
+        enum: ['0', '1'],
         default: '0'
     })
     @IsOptional()
+    @IsIn(['0', '1'], { message: "账号状态只能为：['0', '1']" })
     readonly status: string = '0'
 
     @ApiProperty({
