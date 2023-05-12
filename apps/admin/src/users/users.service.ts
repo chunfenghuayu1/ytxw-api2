@@ -116,21 +116,26 @@ export class UsersService {
         if (res) {
             throw new BadRequestException({ message: '用户已存在' })
         }
-        // 密码加密，返回
-        const { password, pwdSalt } = this.cryptoService.encryptPwd(userWithoutRole.password)
+        try {
+            // 密码加密，返回
+            const { password, pwdSalt } = this.cryptoService.encryptPwd(userWithoutRole.password)
 
-        // 保存加密密码到user
-        const newUser = plainToClass(
-            UserEntity,
-            Object.assign(userWithoutRole, { password, pwdSalt })
-        )
+            // 保存加密密码到user
+            // 此方法将普通javascript对象转换为特定类的实例。
+            const newUser = plainToClass(
+                UserEntity,
+                Object.assign(userWithoutRole, { password, pwdSalt })
+            )
 
-        // 级联实体
-        const userRole = this.userRole.create({ roleId: role })
-        newUser.userRoles = [userRole]
-        // 保存到数据库
-        const result = await this.user.save(newUser)
+            // 级联实体
+            const userRole = this.userRole.create({ roleId: role })
+            newUser.userRoles = [userRole]
+            // 保存到数据库
+            await this.user.save(newUser)
 
-        return { user: instanceToPlain(result) }
+            return { message: '用户创建成功' }
+        } catch (err) {
+            throw new BadRequestException({ message: '用户创建失败' })
+        }
     }
 }

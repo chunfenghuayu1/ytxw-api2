@@ -28,12 +28,12 @@ export class CreateUserDto {
     })
     @IsString()
     @Length(8, 20, { message: '密码长度为8-20' })
-    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, {
         message: '密码必须包含至少一个字母和一个数字，长度在8到20个字符之间'
     })
-    @Matches(/^[a-zA-Z0-9]+$/, {
-        message: '密码不能包含特殊字符'
-    })
+    // @Matches(/^[a-zA-Z0-9]+$/, {
+    //     message: '密码不能包含特殊字符'
+    // })
     readonly password: string
 
     @ApiProperty({
@@ -42,7 +42,7 @@ export class CreateUserDto {
     })
     @IsString({ message: '昵称类型错误，正确类型 string' })
     @IsNotEmpty({ message: '昵称不能为空!' })
-    @MinLength(3, { message: '昵称至少3个字符' })
+    @MinLength(2, { message: '昵称至少2个字符' })
     @MaxLength(20, { message: '昵称最多20个字符' })
     readonly nickName: string
 
@@ -60,9 +60,9 @@ export class CreateUserDto {
         required: false,
         default: ''
     })
-    @Matches(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/, {
-        message: '手机号格式不正确'
-    })
+    // @Matches(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/, {
+    //     message: '手机号格式不正确'
+    // })
     @IsOptional()
     readonly phonenumber: string
 
