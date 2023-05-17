@@ -98,6 +98,7 @@ export class UserEntity extends BaseEntiy {
         length: 1,
         default: () => "'0'"
     })
+    @Exclude({ toPlainOnly: true })
     delFlag: string | null
 
     @Column('varchar', {
@@ -106,6 +107,7 @@ export class UserEntity extends BaseEntiy {
         comment: '最后登录IP',
         length: 50
     })
+    @Exclude({ toPlainOnly: true })
     loginIp: string | null
 
     @Column('datetime', {

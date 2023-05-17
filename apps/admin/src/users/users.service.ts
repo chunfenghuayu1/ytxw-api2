@@ -8,6 +8,7 @@ import { RoleMenuEntity } from '../entities/role-menu.entity'
 import { MenuEntity } from '../entities/menu.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { CryptoService } from '@app/common/crypto/crypto.service'
+import { GetAllUserDto } from './dto/get-allUser.dto'
 
 @Injectable()
 export class UsersService {
@@ -25,17 +26,21 @@ export class UsersService {
     }
 
     // 查找所有用户
-    async findAll(): Promise<Record<string, any>> {
-        const res = await this.user.find()
-        return instanceToPlain(res)
-    }
-
-    // 根据条件模糊查找用户
-    async findByCondition(userName?: string, nickName?: string): Promise<Record<string, any>> {
+    async findAll(getAllUser: GetAllUserDto): Promise<Record<string, any>> {
+        const { userName, nickName, page, limit } = getAllUser
+        const rpage = page > 0 ? page : 0
         const res = await this.user.find({
+            where: { userName: Like(`%${userName}%`), nickName: Like(`%${nickName}%`) },
+            skip: (rpage - 1) * limit,
+            take: limit
+        })
+        const total = await this.user.count({
             where: { userName: Like(`%${userName}%`), nickName: Like(`%${nickName}%`) }
         })
-        return instanceToPlain(res)
+        return {
+            list: instanceToPlain(res),
+            total
+        }
     }
 
     // 登录记录时间
@@ -64,14 +69,15 @@ export class UsersService {
             .leftJoinAndSelect(RoleMenuEntity, 'roleMenu', 'menu.menuId = roleMenu.menuId')
             .leftJoinAndSelect(UserRoleEntity, 'userRole', 'roleMenu.roleId = userRole.roleId')
             .where('userRole.userId= :userId', { userId })
+            .andWhere('menu.status= 0')
             .select([
                 'menu.menuId as menuId',
                 'menu.parentId as parentId',
                 'menu.path as path',
                 'menu.menuName as name',
+                'menu.alwaysShow as alwaysShow',
                 'menu.component as component',
                 'menu.redirect as redirect',
-                'menu.orderNo as orderNo',
                 'menu.icon as icon',
                 'menu.title as title'
             ])
@@ -90,13 +96,23 @@ export class UsersService {
                 const newRoute = {
                     path: route.path,
                     component: route.component,
-                    name: route.name,
-                    redirect: route.redirect,
                     meta: {
                         title: route.title,
-                        icon: route.icon,
-                        orderNo: route.orderNo
+                        icon: route.icon
+                        // orderNo: route.orderNo
                     }
+                }
+                if (!route.redirect) {
+                    newRoute['name'] = route.name
+                }
+                // 目前只有标签为alwaysShow
+                // 去除alwaysShow为false
+                if (route.alwaysShow === 1) {
+                    newRoute['alwaysShow'] = true
+                }
+                // 去除null
+                if (route.redirect) {
+                    Object.assign(newRoute, { redirect: route.redirect })
                 }
                 const children = this.buildRouteTree(routes, route.menuId)
                 if (children.length > 0) {

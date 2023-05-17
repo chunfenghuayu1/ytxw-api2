@@ -24,10 +24,7 @@ export class UsersController {
     @ApiOperation({ summary: '查询所有用户或部分符合条件的用户' })
     @ApiBearerAuth()
     @UseGuards(AuthGuard('jwt'))
-    async getAllUser(@Query() { userName, nickName }: GetAllUserDto) {
-        if (userName || nickName) {
-            return await this.usersService.findByCondition(userName, nickName)
-        }
-        return await this.usersService.findAll()
+    async getAllUser(@Query() getAllUser: GetAllUserDto) {
+        return await this.usersService.findAll(getAllUser)
     }
 }

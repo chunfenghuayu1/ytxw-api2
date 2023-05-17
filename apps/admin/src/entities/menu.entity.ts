@@ -29,6 +29,16 @@ export class MenuEntity extends BaseEntiy {
     })
     orderNo: number | null
 
+    @Column({
+        type: 'tinyint',
+        name: 'alwaysShow',
+        nullable: true,
+        comment: '是否显示菜单（0false 1true）',
+        width: 1,
+        default: () => 0
+    })
+    alwaysShow: number
+
     @Column('varchar', {
         name: 'path',
         nullable: true,

@@ -21,7 +21,7 @@ export class RoleEntity extends BaseEntiy {
         comment: '角色权限字符串',
         length: 100
     })
-    @Exclude({ toPlainOnly: true })
+    // @Exclude({ toPlainOnly: true })
     roleKey: string
 
     @Column('int', { name: 'role_sort', comment: '显示顺序' })
@@ -53,6 +53,7 @@ export class RoleEntity extends BaseEntiy {
         comment: '角色状态（0正常 1停用）',
         length: 1
     })
+    @Exclude({ toPlainOnly: true })
     status: string
 
     @Column('char', {
@@ -62,6 +63,7 @@ export class RoleEntity extends BaseEntiy {
         length: 1,
         default: () => "'0'"
     })
+    @Exclude({ toPlainOnly: true })
     delFlag: string | null
 
     @Column('varchar', {

@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsOptional } from 'class-validator'
+import { PagenationOptionsDto } from './pagination.dto'
 
-export class GetAllUserDto {
+export class GetAllUserDto extends PagenationOptionsDto {
     @ApiProperty({
         description: '用户名',
         required: false

@@ -31,9 +31,9 @@ export class CreateUserDto {
     @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, {
         message: '密码必须包含至少一个字母和一个数字，长度在8到20个字符之间'
     })
-    // @Matches(/^[a-zA-Z0-9]+$/, {
-    //     message: '密码不能包含特殊字符'
-    // })
+    @Matches(/^[a-zA-Z0-9]+$/, {
+        message: '密码不能包含特殊字符'
+    })
     readonly password: string
 
     @ApiProperty({
@@ -53,7 +53,8 @@ export class CreateUserDto {
     })
     @IsEmail({}, { message: '邮箱格式不正确' })
     @IsOptional()
-    readonly email: SVGStringList
+    readonly email: string
+    // readonly email: SVGStringList
 
     @ApiProperty({
         description: '手机号码',
