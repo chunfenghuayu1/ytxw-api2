@@ -78,7 +78,7 @@ export class UsersService {
                 'menu.alwaysShow as alwaysShow',
                 'menu.component as component',
                 'menu.redirect as redirect',
-                'menu.icon as icon',
+                'menu.icon as svgIcon',
                 'menu.title as title'
             ])
             .orderBy('menu.parentId')
@@ -96,9 +96,10 @@ export class UsersService {
                 const newRoute = {
                     path: route.path,
                     component: route.component,
+                    name: route.name,
                     meta: {
                         title: route.title,
-                        icon: route.icon
+                        svgIcon: route.svgIcon
                         // orderNo: route.orderNo
                     }
                 }
@@ -108,7 +109,7 @@ export class UsersService {
                 // 目前只有标签为alwaysShow
                 // 去除alwaysShow为false
                 if (route.alwaysShow === 1) {
-                    newRoute['alwaysShow'] = true
+                    newRoute.meta['alwaysShow'] = true
                 }
                 // 去除null
                 if (route.redirect) {

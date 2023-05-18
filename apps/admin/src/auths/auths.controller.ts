@@ -33,11 +33,11 @@ export class AuthsController {
 
     // 获取路由信息
     @Post('getRouters')
-    @ApiOperation({ summary: '获取路由信息', deprecated: true })
+    @ApiOperation({ summary: '获取路由信息' })
     @ApiBearerAuth()
     @UseGuards(AuthGuard('jwt'))
     async getRouters(@Req() req) {
-        return { message: '停用' }
-        // return await this.usersService.getRouters(req.user.uid)
+        // return { message: '停用' }
+        return await this.usersService.getRouters(req.user.uid)
     }
 }
