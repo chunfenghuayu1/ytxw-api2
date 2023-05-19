@@ -129,7 +129,7 @@ export class UserEntity extends BaseEntiy {
 
     // 角色关系
     @OneToMany(() => UserRoleEntity, userRoles => userRoles.user, {
-        cascade: ['insert', 'remove'],
+        cascade: true,
         nullable: false
     })
     public userRoles!: UserRoleEntity[]

@@ -10,13 +10,17 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
         const status = exception.getStatus()
         const exceptionRes: any = exception.getResponse()
         const { error, message } = exceptionRes
+        let msg = message
+        if (Array.isArray(message)) {
+            msg = message.join(',')
+        }
 
         response.status(status).json({
             code: status,
             timestamp: new Date().toISOString(),
             path: request.url,
             error,
-            data: { message }
+            data: { message: msg }
         })
     }
 }

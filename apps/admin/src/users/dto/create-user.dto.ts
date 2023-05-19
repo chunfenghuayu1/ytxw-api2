@@ -17,8 +17,8 @@ export class CreateUserDto {
         description: '用户名',
         required: true
     })
-    @Matches(/^[a-zA-Z0-9_-]{3,16}$/, {
-        message: '用户名只能包含字母、数字、下划线和减号，且长度为3-16位'
+    @Matches(/^[a-zA-Z0-9_-]{5,20}$/, {
+        message: '用户名只能包含字母、数字、下划线和减号，且长度为5-20位'
     })
     readonly userName: string
 
@@ -61,9 +61,9 @@ export class CreateUserDto {
         required: false,
         default: ''
     })
-    // @Matches(/^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/, {
-    //     message: '手机号格式不正确'
-    // })
+    @Matches(/^1(?:3\d|4[4-9]|5[0-35-9]|6[67]|7[013-8]|8\d|9\d)\d{8}$/, {
+        message: '手机号格式不正确'
+    })
     @IsOptional()
     readonly phonenumber: string
 

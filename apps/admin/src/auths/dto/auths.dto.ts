@@ -11,7 +11,7 @@ export class LoginDto {
     @IsNotEmpty({ message: '用户名不能为空!' })
     @MinLength(5, { message: '用户名至少5个字符' })
     @MaxLength(20, { message: '用户名最多20个字符' })
-    readonly username: string
+    readonly userName: string
 
     @ApiProperty({
         description: '密码',

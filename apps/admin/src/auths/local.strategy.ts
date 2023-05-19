@@ -10,11 +10,11 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         private readonly usersService: UsersService,
         private readonly cryptoService: CryptoService
     ) {
-        super({ usernameField: 'username', passwordField: 'password' } as IStrategyOptions)
+        super({ usernameField: 'userName', passwordField: 'password' } as IStrategyOptions)
     }
-    async validate(username: string, password: string): Promise<any> {
+    async validate(userName: string, password: string): Promise<any> {
         // 查找用户
-        const user = await this.usersService.findByUsername(username)
+        const user = await this.usersService.findByUsername(userName)
 
         if (!user) {
             throw new NotFoundException({ message: '用户名或密码错误' })

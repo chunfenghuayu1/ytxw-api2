@@ -1,14 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Like, Repository } from 'typeorm'
+import { Like, Repository, getManager } from 'typeorm'
 import { UserEntity } from '../entities/user.entity'
-import { instanceToPlain, plainToClass } from 'class-transformer'
+import { classToPlain, instanceToPlain, plainToClass, plainToInstance } from 'class-transformer'
 import { UserRoleEntity } from '../entities/user-role.entity'
 import { RoleMenuEntity } from '../entities/role-menu.entity'
 import { MenuEntity } from '../entities/menu.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { CryptoService } from '@app/common/crypto/crypto.service'
 import { GetAllUserDto } from './dto/get-allUser.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UsersService {
@@ -154,5 +155,29 @@ export class UsersService {
         } catch (err) {
             throw new BadRequestException({ message: '用户创建失败' })
         }
+    }
+
+    // 更新用户数据
+    async updateUser(id: number, user: UpdateUserDto) {
+        const { userName, role: roleId, ...arg } = user
+        const userRes = await this.user.findOne({
+            where: { userId: id, userName }
+        })
+        if (!userRes) {
+            throw new BadRequestException({ message: '该用户不存在' })
+        }
+        try {
+            const role = await this.userRole.findOne({ where: { userId: id } })
+            role.roleId = roleId
+
+            const newUser = plainToInstance(UserEntity, Object.assign(userRes, arg))
+            const newUserRole = plainToInstance(UserRoleEntity, role)
+            await this.user.update({ userId: id }, newUser)
+            await this.userRole.update({ userId: id }, newUserRole)
+        } catch (error) {
+            throw new BadRequestException('更新用户信息失败')
+        }
+
+        return { message: '更新用户信息成功' }
     }
 }

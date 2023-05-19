@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common'
 import { UsersService } from './users.service'
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger'
 import { CreateUserDto } from './dto/create-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { GetAllUserDto } from './dto/get-allUser.dto'
+import { plainToClass } from 'class-transformer'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @ApiTags('用户')
 @Controller('user')
@@ -16,7 +18,7 @@ export class UsersController {
     @ApiBearerAuth()
     @UseGuards(AuthGuard('jwt'))
     async createUser(@Body() createUser: CreateUserDto) {
-        return await this.usersService.createUser(createUser)
+        return await this.usersService.createUser(plainToClass(CreateUserDto, createUser))
     }
 
     // 查询所有用户
@@ -26,5 +28,19 @@ export class UsersController {
     @UseGuards(AuthGuard('jwt'))
     async getAllUser(@Query() getAllUser: GetAllUserDto) {
         return await this.usersService.findAll(getAllUser)
+    }
+
+    // 修改用户信息
+    @Put(':id')
+    @ApiOperation({ summary: '修改用户信息 只有管理员能改' })
+    @ApiParam({
+        name: 'id',
+        description: '用户ID',
+        type: Number
+    })
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    async updateUser(@Param('id') id: number, @Body() updateUser: UpdateUserDto) {
+        return await this.usersService.updateUser(id, updateUser)
     }
 }
