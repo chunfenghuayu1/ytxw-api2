@@ -9,7 +9,7 @@ import { MenuEntity } from '../entities/menu.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { CryptoService } from '@app/common/crypto/crypto.service'
 import { GetAllUserDto } from './dto/get-allUser.dto'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { ChangeUserStatusDto, UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UsersService {
@@ -30,13 +30,11 @@ export class UsersService {
     async findAll(getAllUser: GetAllUserDto): Promise<Record<string, any>> {
         const { userName, nickName, page, limit } = getAllUser
         const rpage = page > 0 ? page : 0
-        const res = await this.user.find({
+        const [res, total] = await this.user.findAndCount({
             where: { userName: Like(`%${userName}%`), nickName: Like(`%${nickName}%`) },
+            relations: ['userRoles'],
             skip: (rpage - 1) * limit,
             take: limit
-        })
-        const total = await this.user.count({
-            where: { userName: Like(`%${userName}%`), nickName: Like(`%${nickName}%`) }
         })
         return {
             list: instanceToPlain(res),
@@ -56,6 +54,7 @@ export class UsersService {
             relations: ['user', 'role'],
             where: { userId }
         })
+
         delete user.roleId
         delete user.userId
 
@@ -179,5 +178,20 @@ export class UsersService {
         }
 
         return { message: '更新用户信息成功' }
+    }
+
+    // 更改用户状态
+    async changeUserStatus({ userId, status: s }: ChangeUserStatusDto) {
+        const user = await this.user.findOne({ where: { userId } })
+        if (!user) {
+            throw new BadRequestException('用户不存在')
+        }
+        try {
+            user.status = s
+            const { status } = await this.user.save(user)
+            return { status, message: '更新用户状态成功' }
+        } catch (error) {
+            throw new BadRequestException('更新用户状态失败')
+        }
     }
 }

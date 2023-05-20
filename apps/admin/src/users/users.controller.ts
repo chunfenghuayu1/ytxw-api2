@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { GetAllUserDto } from './dto/get-allUser.dto'
 import { plainToClass } from 'class-transformer'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { ChangeUserStatusDto, UpdateUserDto } from './dto/update-user.dto'
 
 @ApiTags('用户')
 @Controller('user')
@@ -42,5 +42,14 @@ export class UsersController {
     @UseGuards(AuthGuard('jwt'))
     async updateUser(@Param('id') id: number, @Body() updateUser: UpdateUserDto) {
         return await this.usersService.updateUser(id, updateUser)
+    }
+
+    // 修改用户状态
+    @Post('status')
+    @ApiOperation({ summary: '修改用户状态 只有管理员能改' })
+    @ApiBearerAuth()
+    @UseGuards(AuthGuard('jwt'))
+    async changeUserStatus(@Body() data: ChangeUserStatusDto) {
+        return this.usersService.changeUserStatus(data)
     }
 }
