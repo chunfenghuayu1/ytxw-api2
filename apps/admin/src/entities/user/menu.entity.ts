@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
-import { BaseEntiy } from './base.entity'
+import { BaseEntity } from '../base.entity'
 
 @Entity('sys_menu', { schema: 'ytxw' })
-export class MenuEntity extends BaseEntiy {
+export class MenuEntity extends BaseEntity {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'menu_id',

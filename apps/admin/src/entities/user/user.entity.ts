@@ -1,11 +1,11 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Exclude, Transform } from 'class-transformer'
 import * as moment from 'moment'
-import { BaseEntiy } from './base.entity'
 import { UserRoleEntity } from './user-role.entity'
+import { BaseEntity } from '../base.entity'
 
 @Entity('sys_user', { schema: 'ytxw' })
-export class UserEntity extends BaseEntiy {
+export class UserEntity extends BaseEntity {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'user_id',

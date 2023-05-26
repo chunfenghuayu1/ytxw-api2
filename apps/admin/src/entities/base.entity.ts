@@ -2,7 +2,7 @@ import { Transform } from 'class-transformer'
 import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
 import * as moment from 'moment'
 
-export class BaseEntiy {
+export class BaseEntity {
     @Column('varchar', {
         name: 'create_by',
         nullable: true,

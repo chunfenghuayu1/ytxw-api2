@@ -1,15 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Like, Repository, getManager } from 'typeorm'
-import { UserEntity } from '../entities/user.entity'
-import { classToPlain, instanceToPlain, plainToClass, plainToInstance } from 'class-transformer'
-import { UserRoleEntity } from '../entities/user-role.entity'
-import { RoleMenuEntity } from '../entities/role-menu.entity'
-import { MenuEntity } from '../entities/menu.entity'
+import { Like, Repository } from 'typeorm'
+import { instanceToPlain, plainToClass, plainToInstance } from 'class-transformer'
+import { RoleMenuEntity } from '../entities/user/role-menu.entity'
+import { MenuEntity } from '../entities/user/menu.entity'
 import { CreateUserDto } from './dto/create-user.dto'
 import { CryptoService } from '@app/common/crypto/crypto.service'
 import { GetAllUserDto } from './dto/get-allUser.dto'
 import { ChangeUserStatusDto, UpdateUserDto } from './dto/update-user.dto'
+import { UserEntity } from '../entities/user/user.entity'
+import { UserRoleEntity } from '../entities/user/user-role.entity'
 
 @Injectable()
 export class UsersService {

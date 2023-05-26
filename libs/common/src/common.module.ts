@@ -8,10 +8,11 @@ import { ResponseInterceptor } from './interceptors/response.interceptor'
 import { CryptoService } from './crypto/crypto.service'
 import helmet from 'helmet'
 import { DbModule } from '@libs/db'
+import { SchoolModule } from './school/school.module'
 
 @Global()
 @Module({
-    imports: [ConfigModule.forRoot({ isGlobal: true, load: [database] }), DbModule],
+    imports: [ConfigModule.forRoot({ isGlobal: true, load: [database] }), DbModule, SchoolModule],
     providers: [
         {
             provide: APP_FILTER,

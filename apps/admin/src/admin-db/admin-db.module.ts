@@ -1,11 +1,11 @@
 import { Global, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import { UserEntity } from '../entities/user.entity'
-import { UserRoleEntity } from '../entities/user-role.entity'
-import { RoleEntity } from '../entities/role.entity'
-import { RoleMenuEntity } from '../entities/role-menu.entity'
-import { MenuEntity } from '../entities/menu.entity'
+import { RoleEntity } from '../entities/user/role.entity'
+import { RoleMenuEntity } from '../entities/user/role-menu.entity'
+import { MenuEntity } from '../entities/user/menu.entity'
+import { UserEntity } from '../entities/user/user.entity'
+import { UserRoleEntity } from '../entities/user/user-role.entity'
 
 const modules = TypeOrmModule.forFeature([
     UserEntity,

@@ -1,10 +1,10 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { BaseEntiy } from './base.entity'
+import { BaseEntity } from '../base.entity'
 import { UserRoleEntity } from './user-role.entity'
 import { Exclude } from 'class-transformer'
 
 @Entity('sys_role', { schema: 'ytxw' })
-export class RoleEntity extends BaseEntiy {
+export class RoleEntity extends BaseEntity {
     @PrimaryGeneratedColumn({
         type: 'bigint',
         name: 'role_id',

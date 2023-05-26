@@ -18,7 +18,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/server/test/jest-e2e.json",
     "admin": "nest start --watch admin",
-    "server": "nest start --watch server",
+    "weapp": "nest start --watch server",
     "generate:models": "typeorm-model-generator -h 43.139.5.227 -p 3306 -d ytxw -u ytxwxyz -x ad5rSJWrSCDpf82p -e mysql -o apps/admin/src/entities1 --noConfig true"
   },
   "dependencies": {
